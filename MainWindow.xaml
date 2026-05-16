@@ -1,0 +1,150 @@
+<Window x:Class="DrawFigureApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="лабораторная работа №7 Галеева Эльза" Height="815" Width="980"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0">
+            <TextBlock DockPanel.Dock="Top" Text="управление фигурами" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+            <TabControl>
+                <TabItem Header="добавить">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10" >
+                            <TextBlock Text="тип фигуры"/>
+                            <ComboBox x:Name="FigureType" SelectedIndex="0" Margin="0,4,0,10">
+                                <ComboBoxItem Content="прямоугольник"/>
+                                <ComboBoxItem Content="квадрат"/>
+                                <ComboBoxItem Content="эллипс"/>
+                                <ComboBoxItem Content="окружность"/>
+                                <ComboBoxItem Content="треугольник"/>
+                                <ComboBoxItem Content="фигурист"/>
+                            </ComboBox>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,8,6" Text="X:"/>
+                                <TextBox   Grid.Row="0" Grid.Column="1" Margin="0,0,0,6" x:Name="InputX"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,8,6" Text="Y:"/>
+                                <TextBox   Grid.Row="1" Grid.Column="1" Margin="0,0,0,6" x:Name="InputY"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,8,6" Text="W, сторона, радиус:"/>
+                                <TextBox   Grid.Row="2" Grid.Column="1" Margin="0,0,0,6" x:Name="InputW"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,8,0" Text="H:"/>
+                                <TextBox   Grid.Row="3" Grid.Column="1" x:Name="InputH"/>
+                            </Grid>
+
+                            <Button Content="добавить фигуру" Margin="0,12,0,0" Height="34" Click="AddFigure_Click"/>
+                            <Button Content="очистить" Margin="0,8,0,0" Height="34" Click="ClearAll_Click"/>
+
+                            <Separator Margin="0,14,0,14"/>
+
+                            <TextBlock Text="для многоугольника" FontWeight="SemiBold"/>
+                            <TextBlock Margin="0,6,0,0" Text="вершин:"/>
+                            <TextBox x:Name="PolyCount"/>
+
+                            <WrapPanel Margin="0,10,0,0">
+                                <StackPanel Width="140">
+                                    <TextBlock Text="X точки:"/>
+                                    <TextBox x:Name="PolyX"/>
+                                </StackPanel>
+                                <StackPanel Width="140" Margin="10,0,0,0">
+                                    <TextBlock Text="Y точки:"/>
+                                    <TextBox x:Name="PolyY"/>
+                                </StackPanel>
+                            </WrapPanel>
+
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button x:Name="PolyAddPoint" Content="добавить точку" Height="32" Width="150" Click="PolyAddPoint_Click"/>
+                                <Button x:Name="PolyDraw" Content="нарисовать полигон" Height="32" Width="150" Margin="10,0,0,0" IsEnabled="False" Click="PolyDraw_Click"/>
+                            </WrapPanel>
+
+                            <TextBlock Margin="0,10,0,0" TextWrapping="Wrap" FontSize="12" Foreground="Gray"
+                                       Text="после ввода первой точки поле вершин блокируется "/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="выбранная">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="фигуры"/>
+                        <ListBox x:Name="FigureList" Height="170" Margin="0,6,0,10" SelectionChanged="FigureList_SelectionChanged"/>
+
+                        <GroupBox Header="перемещение" Margin="0,0,0,10">
+                            <StackPanel Margin="10">
+                                <WrapPanel>
+                                    <StackPanel Width="140">
+                                        <TextBlock Text="dX:"/>
+                                        <TextBox x:Name="MoveDX"/>
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="10,0,0,0">
+                                        <TextBlock Text="dY:"/>
+                                        <TextBox x:Name="MoveDY"/>
+                                    </StackPanel>
+                                </WrapPanel>
+                                <WrapPanel Margin="0,10,0,0">
+                                    <Button Content="сдвинуть" Width="150" Height="32" Click="MoveSelected_Click"/>
+                                    <Button Content="удалить" Width="150" Height="32" Margin="10,0,0,0" Click="DeleteSelected_Click"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Header="уникальные методы" Margin="0,0,0,10">
+                            <StackPanel Margin="10">
+                                <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="Gray"
+                                           Text="прямоугольник: Resize(W,H). окружность: SetRadius(R)."/>
+
+                                <WrapPanel Margin="0,10,0,0">
+                                    <Button Content="Resize (W,H)" Width="150" Height="32" Click="ResizeSelected_Click"/>
+                                    <Button Content="SetRadius (R)" Width="150" Height="32" Margin="10,0,0,0" Click="SetRadiusSelected_Click"/>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,10,0,0">
+                                    <StackPanel Width="140">
+                                        <TextBlock Text="новое W / R:"/>
+                                        <TextBox x:Name="UniqueW"/>
+                                    </StackPanel>
+                                    <StackPanel Width="140" Margin="10,0,0,0">
+                                        <TextBlock Text="новое H:"/>
+                                        <TextBox x:Name="UniqueH"/>
+                                    </StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <Button Content="перерисовать" Height="34" Click="Redraw_Click"/>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+
+        <Border Grid.Column="2" BorderBrush="#FFC8C8C8" BorderThickness="1" CornerRadius="8" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="область рисования" FontWeight="SemiBold"/>
+
+                <Viewbox Grid.Row="1" Stretch="Uniform">
+                    <Image x:Name="DrawingImage" Width="800" Height="500" Stretch="Uniform" SnapsToDevicePixels="True"/>
+                </Viewbox>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
